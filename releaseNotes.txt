@@ -1,0 +1,11 @@
+﻿<h2>Reports Module 05.06.0</h2>
+<p>DNN Reports 05.06.00 will work for any DNN version <strong>7.0.0</strong> and up. Full details on the changes can be found in great detail at <a href="http://dnnreports.codeplex.com/workitem/list/basic">http://dnnreports.codeplex.com/workitem/list/basic</a>. </p>
+<h2>BUG FIXES</h2>
+<ul>
+    <li>Fixed xslt visualizer xsl file retrieval</li>
+    <li>Fixed HTML visualizer html file retrieval</li>
+</ul>
+<h2>ENHANCEMENTS</h2>
+<ul>
+	<li>Made the dataprovider scripts SQL Azure compliant</li>
+</ul>
