@@ -139,6 +139,15 @@ Namespace DotNetNuke.Modules.DTSReports
 		Private Function AutoExecuteReport(ByVal ctlVisualizer As VisualizerControlBase, ByVal report As ReportInfo, ByRef results As DataTable, ByVal fromCache As Boolean) As Boolean
 			Try
 				results = ReportsController.ExecuteReport(report, String.Concat(ReportsController.CACHEKEY_Reports, ModuleId), report.CacheDuration <= 0, Me, fromCache)
+				Dim newView As DataTable = results.Clone()
+				For Each row As DataRow In results.Rows
+					Dim s As String = row.Item("User Name").ToString()
+					If row.Item("User Name").ToString() = "Jennifer Stavale" Then
+						Dim newRow As DataRow = row
+						newView.ImportRow(newRow)
+					End If
+				Next
+				results = newView
 			Catch ex As DataSourceException
 				' Display the error message to host users only
 				If Me.UserInfo.IsSuperUser Then

@@ -151,19 +151,19 @@ Namespace DotNetNuke.Modules.DTSReports.Visualizers.Grid
 					view.Sort = String.Format("{0} {1}", Me.SortExpr, Me.SortDir)
 				End If
 				'durthaler added code
-				'Dim beginDate As String = ""
-				'Dim endDate As String = ""
-				'Dim selectedName As String = ""
-				'Dim newView As DataView = New DataView
-				'If Session("selectedName") IsNot Nothing Then
-				'	selectedName = Session("selectedName").ToString()
-				'End If
-				'If Session("beginDate") IsNot Nothing Then
-				'	beginDate = Session("beginDate").ToString()
-				'End If
-				'If Session("endDate") IsNot Nothing Then
-				'	endDate = Session("endDate").ToString()
-				'End If
+				Dim beginDate As String = ""
+				Dim endDate As String = ""
+				Dim selectedName As String = ""
+				Dim newView As DataView = New DataView
+				If Session("selectedName") IsNot Nothing Then
+					selectedName = Session("selectedName").ToString()
+				End If
+				If Session("beginDate") IsNot Nothing Then
+					beginDate = Session("beginDate").ToString()
+				End If
+				If Session("endDate") IsNot Nothing Then
+					endDate = Session("endDate").ToString()
+				End If
 				'For Each row As DataRowView In view
 				'	Dim name = CStr(row("User Name"))
 				'	If name = selectedName Then
