@@ -229,17 +229,17 @@ Namespace DotNetNuke.Modules.DTSReports
 				DescriptionLiteral.Text = Report.Description
 			End If
 			'durthaler added code
-			'If Not IsPostBack Then
-			'For Each ui As Entities.Users.UserInfo In Entities.Users.UserController.GetUsers(PortalId)
-			'	If ui.IsInRole("Registered Users") And ui.UserID > 2 Then
-			'		Dim li As ListItem = New ListItem
-			'		li.Text = ui.FullName
-			'		li.Value = ui.UserID.ToString()
-			'		ddlUserName.Items.Add(li)
-			'	End If
-			'Next
-			'ddlUserName.DataBind()
-			'End If
+			If Not IsPostBack Then
+				For Each ui As Entities.Users.UserInfo In Entities.Users.UserController.GetUsers(PortalId)
+					If ui.IsInRole("Registered Users") And ui.UserID > 2 Then
+						Dim li As ListItem = New ListItem
+						li.Text = ui.FullName
+						li.Value = ui.UserID.ToString()
+						ddlUserName.Items.Add(li)
+					End If
+				Next
+				ddlUserName.DataBind()
+			End If
 			'end durthaler added code
 			If ClearReportButton.Visible = False Then
 				RunReport()
