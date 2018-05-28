@@ -236,8 +236,8 @@ Namespace DotNetNuke.Modules.DTSReports
 
 			Dim sqlSelect As String = "
 					SELECT 
-						USER_NAME
-						, COUNT(1) 
+						USER_NAME AS [Sales Rep]
+						, COUNT(1)  AS [Search Count]
 
 					FROM [dbo].[vw_UserSearches] "
 
