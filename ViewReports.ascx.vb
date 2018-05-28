@@ -239,10 +239,10 @@ Namespace DotNetNuke.Modules.DTSReports
 						USER_NAME AS [Sales Rep]
 						, COUNT(1)  AS [Search Count]
 
-					FROM [dbo].[vw_UserSearches] "
+					FROM [dbo].[vw_UserSearches]  "
 
 			Dim sqlWhere As String = "
-					WHERE insertedon BETWEEN" + "'" + txtStartDate.Text + "'" + " AND " + "'" + txtEndingDate.Text + "'" + " AND USER_ID > 2 "
+					WHERE insertedon BETWEEN " + "'" + txtStartDate.Text + "'" + " AND " + "'" + txtEndingDate.Text + "'" + " AND USER_ID > 2 "
 
 			Dim sqlGroupBy As String = "
 
