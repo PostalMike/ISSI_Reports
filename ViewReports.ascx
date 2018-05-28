@@ -19,7 +19,7 @@
 	<asp:TextBox ID="txtEndingDate" runat="server"></asp:TextBox>
 	<p>
 		<asp:LinkButton ID="RunReportButton" runat="server" ResourceKey="RunReportButton"
-			CssClass="CommandButton" EnableViewState="false" OnClientClick="MyNewFunction()" />&nbsp;
+			CssClass="CommandButton" EnableViewState="false" />&nbsp;
         <asp:LinkButton ID="ClearReportButton" runat="server" ResourceKey="ClearReportButton"
 			CssClass="CommandButton" Visible="false" EnableViewState="false" />
 	</p>
@@ -27,13 +27,7 @@
 <asp:PlaceHolder ID="VisualizerSection" runat="server" />
 <script type="text/javascript">
 	$(function () {
-		var newDate = new Date();
-		var defDate = ((newDate.getMonth() + 1) + '/' + (newDate.getDate() - 7) + '/' + newDate.getFullYear());
-
 		$("#<%= txtStartDate.ClientID %>").datepicker();
-		$("#<%= txtStartDate.ClientID %>").datepicker('setDate', defDate);
-
 		$("#<%= txtEndingDate.ClientID %>").datepicker();
-		$("#<%= txtEndingDate.ClientID %>").datepicker('setDate', 'today');
 	});
 </script>

@@ -223,6 +223,8 @@ Namespace DotNetNuke.Modules.DTSReports
 			End If
 			'durthaler added code
 			If Not IsPostBack Then
+				txtStartDate.Text = DateTime.Now.AddDays(-7).ToShortDateString()
+				txtEndingDate.Text = DateTime.Now.ToShortDateString()
 				LoadUsers()
 			End If
 
@@ -249,24 +251,23 @@ Namespace DotNetNuke.Modules.DTSReports
 					GROUP BY 
 						USER_NAME
 
+				ORDER BY
+						USER_NAME
 				"
 			Dim sqlResult As String = sqlSelect + sqlWhere + sqlUser + sqlGroupBy
 			mc.UpdateModuleSetting(ModuleId, "dnn_ReportsDS_DotNetNuke_Query", sqlResult)
 			'end durthaler added code
 			If ClearReportButton.Visible = False Then
 				RunReport()
-				'ClearReportButton.Visible = True
+				ClearReportButton.Visible = True
 				If Report.AutoRunReport Then
 					RunReport()
 				End If
 			End If
 
 		End Sub
-		Dim selUser As String = ""
-		'Dim isUsersLoaded As Boolean = False
 		Private Sub LoadUsers()
 			For Each ui As Entities.Users.UserInfo In Entities.Users.UserController.GetUsers(PortalId)
-				'If ui.IsInRole("Registered Users") And ui.UserID > 2 Then
 				If ui.UserID > 2 Then
 					Dim li As ListItem = New ListItem
 					li.Text = ui.FullName
@@ -275,7 +276,6 @@ Namespace DotNetNuke.Modules.DTSReports
 				End If
 			Next
 			ddlUserName.DataBind()
-			'isUsersLoaded = True
 		End Sub
 		Private Sub RunReportButton_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles RunReportButton.Click
 			If ClearReportButton.Visible = True Then
