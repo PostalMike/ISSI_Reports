@@ -32,6 +32,7 @@ Imports System.Web.Compilation
 Imports DotNetNuke.Framework
 Imports DotNetNuke.Modules.DTSReports.Visualizers
 Imports DotNetNuke.Modules.DTSReports.Extensions
+Imports DotNetNuke.Entities.Modules
 
 Namespace DotNetNuke.Modules.DTSReports
 
@@ -139,15 +140,7 @@ Namespace DotNetNuke.Modules.DTSReports
 		Private Function AutoExecuteReport(ByVal ctlVisualizer As VisualizerControlBase, ByVal report As ReportInfo, ByRef results As DataTable, ByVal fromCache As Boolean) As Boolean
 			Try
 				results = ReportsController.ExecuteReport(report, String.Concat(ReportsController.CACHEKEY_Reports, ModuleId), report.CacheDuration <= 0, Me, fromCache)
-				Dim newView As DataTable = results.Clone()
-				For Each row As DataRow In results.Rows
-					Dim s As String = row.Item("User Name").ToString()
-					If row.Item("User Name").ToString() = "Jennifer Stavale" Then
-						Dim newRow As DataRow = row
-						newView.ImportRow(newRow)
-					End If
-				Next
-				results = newView
+
 			Catch ex As DataSourceException
 				' Display the error message to host users only
 				If Me.UserInfo.IsSuperUser Then
@@ -230,20 +223,39 @@ Namespace DotNetNuke.Modules.DTSReports
 			End If
 			'durthaler added code
 			If Not IsPostBack Then
-				For Each ui As Entities.Users.UserInfo In Entities.Users.UserController.GetUsers(PortalId)
-					If ui.IsInRole("Registered Users") And ui.UserID > 2 Then
-						Dim li As ListItem = New ListItem
-						li.Text = ui.FullName
-						li.Value = ui.UserID.ToString()
-						ddlUserName.Items.Add(li)
-					End If
-				Next
-				ddlUserName.DataBind()
+				LoadUsers()
 			End If
+
+			'modify the query setting to use the parameters.
+			Dim mc As New ModuleController
+			Dim sqlUser As String = ""
+
+			If ddlUserName.SelectedIndex > 0 Then
+				sqlUser = " AND USER_NAME =  " + "'" + ddlUserName.SelectedItem.Text + "'"
+			End If
+
+			Dim sqlSelect As String = "
+					SELECT 
+						USER_NAME
+						, COUNT(1) 
+
+					FROM [dbo].[vw_UserSearches] "
+
+			Dim sqlWhere As String = "
+					WHERE insertedon BETWEEN" + "'" + txtStartDate.Text + "'" + " AND " + "'" + txtEndingDate.Text + "'" + " AND USER_ID > 2 "
+
+			Dim sqlGroupBy As String = "
+
+					GROUP BY 
+						USER_NAME
+
+				"
+			Dim sqlResult As String = sqlSelect + sqlWhere + sqlUser + sqlGroupBy
+			mc.UpdateModuleSetting(ModuleId, "dnn_ReportsDS_DotNetNuke_Query", sqlResult)
 			'end durthaler added code
 			If ClearReportButton.Visible = False Then
 				RunReport()
-				ClearReportButton.Visible = True
+				'ClearReportButton.Visible = True
 				If Report.AutoRunReport Then
 					RunReport()
 				End If
@@ -251,25 +263,30 @@ Namespace DotNetNuke.Modules.DTSReports
 
 		End Sub
 		Dim selUser As String = ""
-
+		'Dim isUsersLoaded As Boolean = False
+		Private Sub LoadUsers()
+			For Each ui As Entities.Users.UserInfo In Entities.Users.UserController.GetUsers(PortalId)
+				'If ui.IsInRole("Registered Users") And ui.UserID > 2 Then
+				If ui.UserID > 2 Then
+					Dim li As ListItem = New ListItem
+					li.Text = ui.FullName
+					li.Value = ui.UserID.ToString()
+					ddlUserName.Items.Add(li)
+				End If
+			Next
+			ddlUserName.DataBind()
+			'isUsersLoaded = True
+		End Sub
 		Private Sub RunReportButton_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles RunReportButton.Click
 			If ClearReportButton.Visible = True Then
-				Exit Sub
+				'Exit Sub
 			End If
-			Dim beginDate As String = txtStartDate.Text
-			Dim endDate As String = txtEndingDate.Text
-			'Dim selectedName As String = ddlUserName.SelectedItem.Text
-
-			'Session.Add("selectedName", selUser)
-			'Session.Add("beginDate", beginDate)
-			'Session.Add("endDate", endDate)
+			RunReport()
 		End Sub
-		'Private Sub ddlUserName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlUserName.SelectedIndexChanged
-		'	selUser = ddlUserName.Text
-		'	selUser = ddlUserName.SelectedValue
-		'	selUser = ddlUserName.SelectedItem.Text
-		'	selUser = ddlUserName.SelectedItem.Value
-		'End Sub
+		Protected Sub ddlUserName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlUserName.SelectedIndexChanged
+			Session.Add("selectedUser", ddlUserName.SelectedItem.Text)
+			Session.Add("selectedVallue", ddlUserName.SelectedValue)
+		End Sub
 		Private Sub ClearReportButton_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles ClearReportButton.Click
 			Me.VisualizerSection.Controls.Clear()
 			ClearReportButton.Visible = False

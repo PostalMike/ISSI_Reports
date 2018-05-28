@@ -150,31 +150,6 @@ Namespace DotNetNuke.Modules.DTSReports.Visualizers.Grid
 				If Not String.IsNullOrEmpty(Me.SortExpr) Then
 					view.Sort = String.Format("{0} {1}", Me.SortExpr, Me.SortDir)
 				End If
-				'durthaler added code
-				Dim beginDate As String = ""
-				Dim endDate As String = ""
-				Dim selectedName As String = ""
-				Dim newView As DataView = New DataView
-				If Session("selectedName") IsNot Nothing Then
-					selectedName = Session("selectedName").ToString()
-				End If
-				If Session("beginDate") IsNot Nothing Then
-					beginDate = Session("beginDate").ToString()
-				End If
-				If Session("endDate") IsNot Nothing Then
-					endDate = Session("endDate").ToString()
-				End If
-				'For Each row As DataRowView In view
-				'	Dim name = CStr(row("User Name"))
-				'	If name = selectedName Then
-				'		Dim newRow As DataRowView = view.AddNew()
-				'		newRow("User Name") = selectedName
-				'		newRow("Search Count") = CStr(row("Search Count"))
-				'		newRow.EndEdit()
-				'		'add row to new data view
-				'	End If
-				'Next
-				'end durthaler added code
 				grdResults.DataSource = view
 				ConfigureGridFromSettings()
 			End If

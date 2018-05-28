@@ -8,9 +8,9 @@
 			EnableViewState="false" />
 	</p>
 </asp:Panel>
-<asp:PlaceHolder ID="ControlsPane" runat="server" Visible="false" EnableViewState="false">
+<asp:PlaceHolder ID="ControlsPane" runat="server" Visible="false" EnableViewState="true">
 	<asp:Label ID="lblUserName" runat="server" AssociatedControlID="ddlUserName" Text="User Name: " />
-	<asp:DropDownList ID="ddlUserName" runat="server">
+	<asp:DropDownList ID="ddlUserName" runat="server" AutoPostBack="true">
 		<asp:ListItem Value="0">All Users</asp:ListItem>
 	</asp:DropDownList>
 	<asp:Label ID="lblStartDate" runat="server" AssociatedControlID="txtStartDate" Text="Begin Date: " />
@@ -28,10 +28,11 @@
 <script type="text/javascript">
 	$(function () {
 		var newDate = new Date();
-		var defDate = ('"' + ('0' + (newDate.getMonth() + 1)) + '/' + (newDate.getDate() - 7) + '/' + newDate.getFullYear() + '"');
-		alert(defDate);
-		$("#<%= txtStartDate.ClientID %>").datepicker({ dateFormat: 'dd/mm/yyyy' });
-		$("#<%= txtStartDate.ClientID %>").datepicker('option', 'defaultDate', defDate); 
+		var defDate = ((newDate.getMonth() + 1) + '/' + (newDate.getDate() - 7) + '/' + newDate.getFullYear());
+
+		$("#<%= txtStartDate.ClientID %>").datepicker();
+		$("#<%= txtStartDate.ClientID %>").datepicker('setDate', defDate);
+
 		$("#<%= txtEndingDate.ClientID %>").datepicker();
 		$("#<%= txtEndingDate.ClientID %>").datepicker('setDate', 'today');
 	});
